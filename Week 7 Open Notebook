@@ -1,1 +1,260 @@
+Summary: This lesson introduces a way to populate a website with data obtained from another website via an Application Programming Interface (API). Using some simple programming, it provides strategies for customizing the presentation of that data, providing flexible and generalizable skills.
+
+Scope:
+-	APIs are frequently used as a means of accessing or distributing Open Data (data that is accessible to anyone to use, reuse, and redistribute without restrictions)
+-	APIs are often tailored for developers, and it is still not easy for the researchers with little technical experience to work on them
+-	In the tutorial, we learn basic HTML (Hypertext Markup Language – which is standard code used to structure and display content on the internet, like the skeleton of every website) and PHP (Hypertext Preprocessor – a open-source server-side scripting language explicitly designed for web development) to build a simple website to display API query results of cultural heritage collections, using Europeana API
+-	Examples from this tutorial uses some basic programming, however it is usually also possible to use copy and paste when working with API at a basic level
+
+Contents:
+-	Tutorial is broken up into two parts:
+-	Part one consists of:
+o	What is API? And a brief history of the web
+o	Why is it useful?
+-	Part two consists of more practical application:
+o	Registering for a Europeana API key
+o	Viewing Europeana API data on a web browser
+o	Installing XAMPP
+o	Using a local web server and creating a web page with PHP and HTML
+o	Developing a web page for a Europeana API with PHP and HTML
+o	Creating an API template to access Harvard Art Museum’s API
+
+Software Requirements:
+-	A web browser
+-	A text editor (Atom is recommended)
+-	XAMPP – a free PHP development platform which includes two important packages for the tutorial:
+o	Apache web server and PHP – allows us to create a test website on a web server and simulate access to APIs on your computer
+
+What is Application Programming Interface (API)?
+-	Internet Story to Far:
+o	The World Wide Web (WWW) was initially designed for human-to-machine communication, as we humans created websites on our computers, and other humans sat them on their computers by using web browsers
+o	At the time, were mostly static web pages because they were documents and the contents were fixed by webmasters. Could passively view somebody’s web pages with texts and photos with a Graphical User Interface (GUI) – with the interaction being mostly between humans and machines
+o	Then web pages became dynamic as humans could interact with each other, as content was not fixed by dynamically changes by the actions of users, such as social media where we not only consume web content but also generate it
+o	In order to manage such web resources, we needed database systems behind websites, so that we could store and manage data properly and efficiently
+o	Realized we needed more machine-to-machine communication and as we have more data than humans can actually browse or work on, we needed methods for machines to smoothly communicate with each other, which resulted in the creation of a Web Service – which APIs essentially are
+o	Not only can machines request and obtain data, but also process data they submit – for this tutorial, we focus on obtaining useful data for research purposes
+o	An example of this is imagine running a ski website and you want weather updates for the mountain every half hour, you receive the forecast form a meteorological website for your ski fields every half an hour. It is easier to build a website which can automatically fetch he weather data and simply them at regular intervals. This automation is possible with APIs
+o	APIs normally offer standardized raw data and access methods, allowing you to manipulate and customize data on your end- such as converting Fahrenheit to Celsius or converting a line chart in place of a bar chart
+o	Websites can offer both web pages and APIs, such as Wikipedia offering APIs for other users to let them develop an app, which uses Wikipedia’s machine-readable raw data
+-	Why are APIs Useful for Researchers?
+o	Researchers may be intersetd to use:	
+	More data
+	Related data
+	Interlinking data
+	Remote data
+	Up-to-date data
+	Different types of data
+	Data with better quality
+	Data not obtainable
+	Data with a low price
+o	In general, researchers are keen to take advantage of the power of the Internet by sharing and reusing data
+o	Therefore, “Open-Data” and “date-driven research” have been under the spotlight of academia and industries for the last several years, with APIs being one of the growing areas of this movement
+o	By expanding what datasets are accessible, we can do much more than we could before, leading to change in research practices with hopefully more discoveries and innovations
+
+Europeana API
+-	Europeana: one of the biggest sources of information for cultural heritage in Europe, collecting data from museums, archives, and libraries from all over Europe
+-	Contains over 50 million objects ranging from photos, paintings, books, newspapers, letters, sculptures, coins, specimens, 3D visualizations, and more
+-	The goal of this section is to create a website which requests and then dispalys Europeana API data. We learn how to register with the Europeana API, to access API data with a web browser, to install XAMPP, and to make a simple web page, and to develop another web page to show API data
+-	API registration
+o	Tried requesting a project key, however I have to have already been engaged with the platform and:
+o	 
+o	However, I then requested a personal API and it worked: rodgeddropp
+
+The First Go with API
+-	Typed this in my web browser: https://api.europeana.eu/api/v2/search.json?wskey=rodgeddropp&query=London
+-	And got this:
+-	 
+-	This is called a “data view”
+-	In the URL:
+o	The API key is put in after wskey= which means you are granted personalized access to this web address
+o	Query=London means we are querying the Europeana database and out search keyword is “London” 
+-	We used the search API for this tutorial, however Europeana offers different types of APIs
+
+Understanding API Data (in JSON)
+-	Copy and pasting the data into an online JSON viewer – allowing us to view the data more easily by expanding and collapsing the data hierarchy
+o	Meaning you can hide or reveal details on demand, basically more organized
+-	This then looked like this:
+-	 
+-	Europeana uses a format/structure for its data called JSON (JavaScript Object Notation)
+o	Data is always wrapped with curly brackets: {     }
+o	The data are represented with pairs of strings, each pair has two components separated by a colon :
+	For example: “totalResults”:3053703
+	This is called a name-value pair (the name being totalResults and the value being 3053703
+	When there are more than one pair, these name-value pairs are separated by a coma
+o	By specifying a name, we are able to make a query to retrieve a corresponding data value, and because this format is so simple, it is not only easy for humans but also for machines – allowing for machine-to-machine communication to be easier so long as everybody follows this data format
+-	In the Europeana search API, the actual data of users’ interest are stored within items
+o	When you click the drop down button for items, it contains numbers with square brackets, with each representing an item/record which we have 12 of
+o	The square bracket represent an ordered list of values, called an array
+	The array is one  an of the data types in JSON, similar to name-value pairs we can specify a number to retrieve data in the list
+	Inside each array, we have name-value pairs
+	Some records have more data than others, so the data structure and values may not be consistent
+o	In each record, there can be a long list of name values. Here are the explanations for them:
+  
+
+o	Searching and viewing Europeana datasets is good, but not very convenient because we can only view raw data and/or the default data view, so now we move away from the web browser and try to customize the data view
+o	In the next step, you will be developing a web page
+
+
+XAMPP Installation
+-	Followed instructions and installed XAMPP
+-	 
+-	Then got this:
+-	 
+
+XAMPP and the first Attempt with PHP
+-	Then it told me to open the “htdocs” folder in application folder which looked like this:
+-	 
+-	In the htdocs folder:
+-	 
+-	Then it asks us to make a php file in this folder and title it “helloworld”(can do that in TextEdit for Mac and Notepad for Windows)
+o	What this did was make an RTF file which uses rich text and not plain text which we want
+o	Need to change the format to “make plain text” to make it a php file
+-	 
+-	Asked me to type this into it:
+-	 
+o	Then
+-	Then asks me to type in http://localhost/helloworld.php into a web browser but:
+-	 
+-	So then I looked back at my ‘helloworld’ file to find that it is actually a plain text file and not a php file!
+-	 
+-	I looked it up and I needed to disable the default appending behaviour (.txt) and rejig a few other things in TextEdit to get it save as a php file
+-	Typed in the url again and success!
+-	 
+-	My first PHP web page in a browser
+
+The First Go With HTML
+-	PHP can also work with HTML very well
+o	HTML is a markup language which creates web pages and applications
+-	In the php file on my computer, I now have to:
+-	 
+-	What this did was make the text bold because of the <b> on either end
+
+HTML images and links
+-	Now creating a simple website with some basic HTML and PHP coding, going to display an image on a PHP webpage
+o	Note: adding <br> indicates a line break
+-	Using this code in PHP file:
+-	 
+-	So I get this:
+-	 
+o	In HTML, tag names are called elements and within an element there are also attributes which are additional value that configure the elements or adjust their behaviour
+o	Attributes normally appear as name-value pairs and separated by =
+o	i.e. <img> is an element and src=”” is an attribute
+-	Supposed to get an image of Ramesses however it just shows this icon
+-	Looking it up, this was the reason:
+-	 
+-	When trying the image link into the search bar, it just comes up as an error
+-	If I put an image into the “htdoc” folder, I can specify it using the format IMAGE FILE (i.e. MyImage.jpg) instead of a http:// link
+-	Then copy pasted these lines of code into my php file:
+-	 
+-	For which I got this in my browser:
+-	 
+-	Soand 
+o	<h1> is a heading tag in HTML
+o	<p> is an HTML paragraph
+o	<a> is the hyperlink tag 
+o	href= specifies the URL, in this case a Wikipedia article
+-	I struggled with the fact that the image wasn’t displaying, so instead of having the php file search for the link to the image, I saved the image into the htdocs folder and replaced the url with the name of the file (Ramesses_Vi_closeup.jpg)
+-	 
+-	And success!
+-	 
+
+Using PHP with Europeana API
+-	Now we would like to work on the API using what we have learned about PHP
+-	Only thing about programming that is noted is that we use lots of variables which are like references and similar to the names in the name-value pairs of JSON by naming a location where values are stored so that an unpredictable or changeable value can be accessed through predetermined names. When you need to use a value, you can simply refer to the variable that contains that value
+-	In PHP, variables are represented by the prefix “$”
+o	Such as an author using the word “floccinaucinihilipilification”, you can put:
+o	 
+o	Putting the term in the variable called “it” then when we use $it to refer to the word in the second line
+o	i.e. determining what x and y value so that you know what x + y equals to
+o	The usefulness of this is for example: you specify a country’s population from 2018 in a variable, and use for different statistical calculations in your code
+o	Let’s say you need to update it to reflect the population from 2019, you just need to change the variable
+-	Now the tutorial asks to make a new PHP file called europeana_api.php
+-	Made and put in the code asked and putting in my api key
+-	 
+o	The first line defines the variable ‘$apikey’ and stores the value of my api key, so I can type this instead of my api key every time I need it
+o	The second line defines the variable ‘$contents_europeana’ which is used to store data from the Europeana API
+o	Fopen () means to open data from the URL inside the brackets with the “r” reading content and not writing it to the file
+o	The next line declares $json_europeana and assigns stream_get_contents($contents_europeana) as a value, which obtains the data I just opened
+o	As this data is opened, we close it with fclose 
+-	Then pasted the URL it provided and got this:
+-	 
+-	It is the same JSON data we got before but this time we see it in our web server, not on the Europeana server
+-	In order to manipulate the JSON data, we need to use it in PHP format, so I added the three lines of code it gave me:
+-	 
+o	json_decode converts the value of $json_europeana into PHP code
+o	The HTML hr tag makes a horizontal line to distinguish the JSON data above and below – helping for our readability
+o	$data_europeana->totalResults; displays the totalResult data, where the -> specifies a particular position of the data hierarchy and obtain the data value
+-	Which in the web browser only changed to display a horizontal line and the number 2585841 at the bottom:
+-	 
+
+Building a Table View of Europeana Data
+-	Now we re-organize the data to make it readble, this done by presenting them in a table
+-	It asked me to delete the print $json_europeana and the print $data_europeana->totalResults; and add the lines of code provided, however this got rid of the entire data and just gave an empty table with 4 headers, and because the example given included the JSON data, the totalResult number and the empty table headings, I kept those two lines of code in and just pasted the code provided at the bottom, which matched what was displayed in the tutorial
+-	 
+-	 
+-	Then, I added the lines of code provided in between the table and /table tags, which manipulates the Europeana data to be stored in the variable $data_europeana
+-	 
+-	Which gives us the JSON data organized in a table that contains the title, data provider, external link, and thumbnail of the 12 items it retrieved
+-	 
+o	Europeana records are stored in an array called items
+o	Each piece of data is stored in order and can be accessed by the number corresponding to its place in the array, from [0] to [11]
+o	In order to manipulate said data, we need to use foreach () {} – which is a function that repeats a task for items in a sequence, in this case within the round brackets, we assign a new variable called $item for each record of the array
+o	This is specified within the curly brackets {}
+o	And as we have to print the datasets, we input print with <td></td> representing a column in the table
+o	In sum, foreach loops a taks over an array. The repeating element is defined in () and the task is defined in {}. In this case, we display the data values of each item from [0] to [11] repeatedly, without having to write [0] to [11] one by one
+-	Now tells us to open up this URL (with my api key plugged in): https://api.europeana.eu/api/v2/search.json?wskey=rodgeddropp&query=London&reusability=open&media=true
+o	Not sure why this is included in the tutorial, seems like Sugimoto just wanted to “scrutinise Europeana’s JSON data because we have to specify what data should be displayed as we don’t need all of them”
+
+Error Handling
+-	Now, we try to make it tidy
+o	At this point Sugimoto’s version had error messages that basically tell us that PHP cannot process Europeana data, because the data values we requested don’t exist in the Europeana records
+-	Had there been error messages, such as one of the links not reaching the provider’s website (all of mine did), I would need to something called “exception handling” which means specifying what should happen if an operation fails
+-	Replace previous lines of code with the following (essential says to “display data only when they are available and ignore if they are not”)
+-	 
+o	What is added is isset, which is a PHP function that checks if data exists or not within brackets
+-	Pretty much what this does is that if there is a little mistake in the request, something works at least, without breaking everything else
+-	Now it told me a big congratulations and that I had just made a simple but nice web page within a short space of time that structures API data from Europeana in a customized way
+o	So I went back to the “Building a Table View of Europeana Data” and deleted the two lines of code it told me to and low and behold, my webpage was free of the raw JSON data and just displayed the table:
+o	 
+o	 
+
+API Template
+
+Generalising API Calls in PHP
+-	In this last section, we attempt to create an API template based on the code created
+-	Asks us to put in new lines of code where:
+o	I’ll need to insert my api key
+o	Change the three variables with more meaningful names
+o	HTTP is the URL of an API
+o	And a new foreach loop
+-	Isn’t clear if I need to add these lines of code to my existing php file or make a new one, so I made a new one (where I added the <?php and ?>)
+-	 
+-	From this, should be able to manipulate various types of JSON data
+
+Try the template with Harvard Art Museums
+-	To see if the API template works with other APIs, we test it on Harvard Art Museums API
+-	However I need to get an API key from them first
+-	 
+-	 
+-	Got the API key very quickly: 3f4362d6-f7f6-4906-bbc8-24475d8b090c
+-	First check to see the structure of the data structure: 
+-	 
+-	Again we get this raw JSON data
+-	Next, plugged in the given code into a new TextEdit file and titled it harvard_api.php:
+-	 
+-	Then went on my web browser and typed in localhost/harvard_api.php, which resulted in this page:
+-	 
+-	Because each record is separted by <br> (line break) it is not presented as a table, and the results look a put untidy but can do whatever you want with it
+-	One addition is to specify the image size, which is <img and specifis it as height=“100” width=“100” 
+-	The point of the API template is that it can be reused and customized, therefore the most difficult part would be the examination of the underlying data model of a given API and the handling of data structures
+
+API for everybody
+-	“So, what are you waiting for? Be brave and start your new project”
+
+Nathan’s API Exploration:
+-	First went back to the Harvard_api.php file and put in the same line of code from the europeana_api.php file that formatted the data into a table:
+-	 
+-	Which got me this in the browser:
+-	 
+-	Then after deleting the lines of code that were formatted the same in my previous php file to that printed the raw JSON data and totalResults value:
 
